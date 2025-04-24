@@ -27689,7 +27689,7 @@ class CacheConfig {
      *
      * This will read the action `input`s, and read and persist `state` as necessary.
      */
-    static async new() {
+    static new() {
         const self = new CacheConfig();
         const workspaces = [];
         const workspacesInput = core.getInput("workspaces") || ".";
@@ -27700,24 +27700,6 @@ class CacheConfig {
             workspaces.push(new Workspace(root, target));
         }
         self.workspaces = workspaces;
-        return self;
-    }
-    /**
-     * Reads and returns the cache config from the action `state`.
-     *
-     * @throws {Error} if the state is not present.
-     * @returns {CacheConfig} the configuration.
-     * @see {@link CacheConfig#saveState}
-     * @see {@link CacheConfig#new}
-     */
-    static fromState() {
-        const source = core.getState(STATE_CONFIG);
-        if (!source) {
-            throw new Error("Cache configuration not found in state");
-        }
-        const self = new CacheConfig();
-        Object.assign(self, JSON.parse(source));
-        self.workspaces = self.workspaces.map((w) => new Workspace(w.root, w.target));
         return self;
     }
     /**
@@ -27852,7 +27834,7 @@ async function rm(parent, dirent) {
 
 async function run() {
     try {
-        const config = CacheConfig.fromState();
+        const config = CacheConfig.new();
         const allPackages = [];
         for (const workspace of config.workspaces) {
             const packages = await workspace.getPackagesOutsideWorkspaceRoot();

@@ -5,7 +5,7 @@ import {cleanTargetDir} from "./cleanup";
 
 async function run() {
     try {
-        const config = CacheConfig.fromState();
+        const config = CacheConfig.new();
 
         const allPackages = [];
         for (const workspace of config.workspaces) {
